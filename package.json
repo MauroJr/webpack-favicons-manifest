@@ -1,58 +1,89 @@
 {
-  "name": "favicons-webpack-plugin",
-  "version": "0.0.7",
-  "description": "Let webpack generate all your favicons and icons for you",
-  "main": "index.js",
-  "files": [
-    "index.js",
-    "lib/"
-  ],
-  "scripts": {
-    "lint": "semistandard",
-    "prepublish": "npm run test",
-    "posttest": "npm run lint",
-    "test": "ava"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jantimon/favicons-webpack-plugin.git"
-  },
-  "keywords": [
-    "webpack",
-    "plugin",
-    "html-webpack-plugin",
-    "favicon",
-    "icon"
-  ],
-  "author": "Jan Nicklas <j.nicklas@me.com> (https://github.com/jantimon)",
+  "name": "webpack-favicons-manifest",
+  "version": "0.0.0-development",
+  "description": "Let webpack generate all your icons and manifest file for you",
+  "main": "./lib/index.js",
+  "repository": "git@github.com:MauroJr/webpack-favicons-manifest.git",
+  "author": "Mauro Junior",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/jantimon/favicons-webpack-plugin/issues"
+  "dependencies": {},
+  "keywords": [],
+  "scripts": {
+    "?info": "Display information about the scripts.",
+    "info": "npm-scripts-info",
+    "?start": "Startup the module.",
+    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "?start:prod": "Startup the module with a `production` environment.",
+    "start:prod": "NODE_ENV=production node ./lib/index.js",
+    "?start:dev": "Startup the module with a `development` environment.",
+    "start:dev": "babel-node ./src/index.js",
+    "?debug": "Start a debugger for the `main` entry point.",
+    "debug": "babel-node --inspect --debug-brk ./src/index.js",
+    "?debug:tests": "Start a debugger for the tests",
+    "debug:tests": "mocha --inspect --debug-brk --compilers js:babel-register ./test/*.js",
+    "precommit": "if-env IGNORE_GHOOKS=true || npm run test",
+    "?commit": "Run a wizard to do a `git commit` and `git push` following commitizen rules.",
+    "commit": "git-cz && git push origin HEAD",
+    "?commit:all": "Add all changes to stage and run `npm run commit`",
+    "commit:all": "git add -A && npm run commit",
+    "pretest": "npm run build",
+    "?test": "Build and run all tests.",
+    "test": "npm run lint && nyc --check-coverage mocha --compilers js:babel-register ./test/*.js",
+    "?test:watch": "Build, run all tests and watch for changes.",
+    "test:watch": "mocha ./test/*.js --watch",
+    "?lint": "Run Eslint.",
+    "lint": "eslint .",
+    "?lint:watch": "Run Eslint, and watch for chhanges.",
+    "lint:watch": "esw -w --ignore-path .gitignore .",
+    "?coverage": "Upload coverage report to `codecov.io`.",
+    "coverage": "nyc report --reporter=text-lcov | codecov",
+    "?coverage:summary": "Show a coverage summary in the console.",
+    "coverage:summary": "nyc report",
+    "prebuild": "rimraf lib",
+    "?build": "Check types and build the source to the `lib` folder.",
+    "build": "tsc && babel src --out-dir lib",
+    "?setup": "Install dependencies and run the tests.",
+    "setup": "npm install && npm test",
+    "?semantic-release": "Automatically publish the package following semantic versioning rules.",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
-  "semistandard": {
-    "parser": "babel-eslint"
-  },
-  "homepage": "https://github.com/jantimon/favicons-webpack-plugin",
   "devDependencies": {
-    "ava": "^0.16.0",
-    "babel-eslint": "^7.1.0",
-    "denodeify": "^1.2.1",
-    "dir-compare": "^1.0.1",
-    "express": "^4.13.4",
-    "html-webpack-plugin": "^2.16.0",
-    "memory-fs": "^0.3.0",
-    "mkdirp": "^0.5.1",
-    "rimraf": "^2.5.2",
-    "semistandard": "^9.1.0",
-    "webpack": "^1.13.0",
-    "webpack-dev-middleware": "^1.6.1"
+    "@types/node": "^8.0.26",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-module-resolver": "^2.7.1",
+    "babel-preset-env": "^1.6.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "codecov": "^2.3.0",
+    "commitizen": "^2.9.6",
+    "cz-conventional-changelog": "^2.0.0",
+    "eslint": "^4.6.1",
+    "eslint-config-airbnb-base": "^12.0.0",
+    "eslint-import-resolver-babel-module": "^3.0.0",
+    "eslint-plugin-import": "^2.7.0",
+    "husky": "^0.14.3",
+    "if-env": "^1.0.0",
+    "mocha": "^3.5.0",
+    "npm-scripts-info": "^0.3.6",
+    "nyc": "^11.2.0",
+    "rimraf": "^2.6.1",
+    "semantic-release": "^7.0.2",
+    "typescript": "^2.5.2"
   },
-  "dependencies": {
-    "favicons": "^4.8.3",
-    "loader-utils": "^0.2.14",
-    "lodash": "^4.11.1"
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
   },
-  "peerDependencies": {
-    "webpack": "^1.13.0 || ^2.0.0 || ^3.0.0"
+  "nyc": {
+    "lines": 20,
+    "statements": 20,
+    "functions": 20,
+    "branches": 20,
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
   }
 }

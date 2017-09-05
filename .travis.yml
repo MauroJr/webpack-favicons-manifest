@@ -1,9 +1,20 @@
 language: node_js
+cache:
+  directories:
+  - node_modules
+notifications:
+  email: false
 node_js:
-  - "4"
-  - "5"
-  - "6"
-install:
-  - npm install --ignore-scripts
+- '7'
+- '6'
+before_script:
+- npm prune
 script:
-  - npm test
+- npm run test
+- npm run build
+after_success:
+- npm run coverage
+- npm run semantic-release
+branches:
+  only:
+  - master
