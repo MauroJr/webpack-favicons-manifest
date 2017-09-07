@@ -6,7 +6,9 @@
   "repository": "git@github.com:MauroJr/webpack-favicons-manifest.git",
   "author": "Mauro Junior",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "favicons": "^4.8.6"
+  },
   "keywords": [],
   "scripts": {
     "?info": "Display information about the scripts.",
@@ -69,7 +71,8 @@
     "nyc": "^11.2.0",
     "rimraf": "^2.6.1",
     "semantic-release": "^7.0.2",
-    "typescript": "^2.5.2"
+    "typescript": "^2.5.2",
+    "webpack": "^3.5.5"
   },
   "config": {
     "commitizen": {
