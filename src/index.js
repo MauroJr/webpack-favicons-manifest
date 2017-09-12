@@ -1,12 +1,10 @@
 import * as assert from 'assert';
+import * as fs from 'fs';
+import * as path from 'path';
 
 import childCompiler from './compiler';
 
-const _ = require('lodash');
-const fs = require('fs');
-const path = require('path');
-
-function FaviconsWebpackPlugin(opts) {
+export default function FaviconsWebpackPlugin(opts) {
   let options = opts;
 
   if (typeof opts === 'string') {
@@ -14,7 +12,7 @@ function FaviconsWebpackPlugin(opts) {
   }
   assert(typeof options === 'object', 'FaviconsWebpackPlugin options are required');
   assert(options.logo, 'An input file is required');
-  this.options = _.extend({
+  this.options = Object.assign({
     prefix: 'icons-[hash]/',
     emitStats: false,
     statsFilename: 'iconstats-[hash].json',
@@ -22,7 +20,7 @@ function FaviconsWebpackPlugin(opts) {
     inject: true,
     background: '#fff'
   }, options);
-  this.options.icons = _.extend({
+  this.options.icons = Object.assign({
     android: true,
     appleIcon: true,
     appleStartup: true,
@@ -62,7 +60,9 @@ FaviconsWebpackPlugin.prototype.apply = function apply(compiler) {
       compilation.plugin('html-webpack-plugin-before-html-processing', (htmlPluginData, callback) => {
         if (htmlPluginData.plugin.options.favicons !== false) {
           htmlPluginData.html = htmlPluginData.html.replace(
-            /(<\/head>)/i, compilationResult.stats.html.join('') + '$&');
+            /(<\/head>)/i,
+            compilationResult.stats.html.join('') + '$&'
+          );
         }
         callback(null, htmlPluginData);
       });
@@ -91,5 +91,3 @@ function guessAppName(compilerWorkingDirectory) {
   }
   return JSON.parse(fs.readFileSync(packageJson)).name;
 }
-
-module.exports = FaviconsWebpackPlugin;
