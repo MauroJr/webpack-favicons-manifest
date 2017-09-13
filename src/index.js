@@ -10,8 +10,8 @@ export default function FaviconsManifestWebpackPlugin(opts) {
   if (typeof opts === 'string') {
     options = { iconSource: opts };
   }
-  assert(typeof options === 'object', 'FaviconsManifestWebpackPlugin options are required');
-  assert(options.iconSource, 'An input file is required');
+  assert.equal(typeof options, 'object', 'FaviconsManifestWebpackPlugin options are required');
+  assert.ok(options.iconSource, 'An input file is required');
 
   this.options = Object.assign({
     prefix: 'icons-[hash]/',
