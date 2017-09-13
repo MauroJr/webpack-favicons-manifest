@@ -43,7 +43,7 @@ export default function FaviconsManifestWebpackPlugin(opts) {
 
 FaviconsManifestWebpackPlugin.prototype.apply = function apply(compiler) {
   const self = this;
-  const packageJson = parsePackageJson();
+  const packageJson = parsePackageJson(compiler.context);
   const { favicons } = self.options;
   const {
     appName,
@@ -72,7 +72,7 @@ FaviconsManifestWebpackPlugin.prototype.apply = function apply(compiler) {
   let compilationResult;
 
   compiler.plugin('make', (compilation, callback) => {
-    childCompiler.compileTemplate(self.options, compiler.context, compilation)
+    childCompiler(self.options, compiler.context, compilation)
       .then((result) => {
         compilationResult = result;
         callback();
