@@ -14,7 +14,7 @@ export default function childCompiler(options, context, compilation) {
   const compilerName = getCompilerName(context, outputOptions.filename);
   const compiler = compilation.createChildCompiler(compilerName, outputOptions);
   compiler.context = context;
-  compiler.apply(new SingleEntryPlugin(context, '!!' + require.resolve('./favicons.js') + '?' +
+  compiler.apply(new SingleEntryPlugin(context, '!!' + require.resolve('./favicons-manifest.js') + '?' +
       JSON.stringify({
         outputFilePrefix: options.prefix,
         persistentCache: options.persistentCache,
