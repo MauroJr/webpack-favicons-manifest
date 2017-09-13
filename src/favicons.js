@@ -61,13 +61,7 @@ function getPublicPath(compilation) {
 
 function generateIcons(loader, imageFileStream, pathPrefix, query, callback) {
   const publicPath = getPublicPath(loader._compilation);
-  favicons(imageFileStream, {
-    path: '',
-    url: '',
-    icons: query.icons,
-    background: query.background,
-    appName: query.appName
-  }, (err, result) => {
+  favicons(imageFileStream, query.favicons, (err, result) => {
     if (err) {
       return callback(err);
     }

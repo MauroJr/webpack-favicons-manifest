@@ -17,11 +17,9 @@ export default function childCompiler(options, context, compilation) {
   compiler.apply(new SingleEntryPlugin(context, '!!' + require.resolve('./favicons.js') + '?' +
       JSON.stringify({
         outputFilePrefix: options.prefix,
-        icons: options.icons,
-        background: options.background,
         persistentCache: options.persistentCache,
-        appName: options.title
-      }) + '!' + options.logo));
+        favicons: options.favicons
+      }) + '!' + options.iconSource));
 
   // Fix for "Uncaught TypeError: __webpack_require__(...) is not a function"
   // Hot module replacement requires that every child compiler has its own

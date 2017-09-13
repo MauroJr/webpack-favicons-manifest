@@ -4,41 +4,68 @@ import * as path from 'path';
 
 import childCompiler from './compiler';
 
-export default function FaviconsWebpackPlugin(opts) {
+export default function FaviconsManifestWebpackPlugin(opts) {
   let options = opts;
 
   if (typeof opts === 'string') {
-    options = { logo: opts };
+    options = { iconSource: opts };
   }
-  assert(typeof options === 'object', 'FaviconsWebpackPlugin options are required');
-  assert(options.logo, 'An input file is required');
+  assert(typeof options === 'object', 'FaviconsManifestWebpackPlugin options are required');
+  assert(options.iconSource, 'An input file is required');
+
   this.options = Object.assign({
     prefix: 'icons-[hash]/',
     emitStats: false,
     statsFilename: 'iconstats-[hash].json',
     persistentCache: true,
     inject: true,
-    background: '#fff'
+    favicons: {}
   }, options);
-  this.options.icons = Object.assign({
+
+  this.options.favicons = Object.assign({
+    background: '#fff',
+    icons: {}
+  }, this.options.favicons);
+
+  this.options.favicons.icons = Object.assign({
     android: true,
     appleIcon: true,
     appleStartup: true,
     coast: false,
     favicons: true,
-    firefox: true,
+    firefox: false,
     opengraph: false,
     twitter: false,
     yandex: false,
-    windows: false
-  }, this.options.icons);
+    windows: true
+  }, this.options.favicons.icons);
 }
 
-FaviconsWebpackPlugin.prototype.apply = function apply(compiler) {
+FaviconsManifestWebpackPlugin.prototype.apply = function apply(compiler) {
   const self = this;
+  const packageJson = parsePackageJson();
+  const { favicons } = self.options;
+  const {
+    appName,
+    appDescription,
+    developerName,
+    developerURL
+  } = favicons;
 
-  if (!self.options.title) {
-    self.options.title = guessAppName(compiler.context);
+  if (!appName) {
+    favicons.appName = packageJson.name || 'My PWA';
+  }
+
+  if (!appDescription) {
+    favicons.appDescription = packageJson.description || 'My Awesome PWA';
+  }
+
+  if (!developerName) {
+    favicons.developerName = packageJson.author || '';
+  }
+
+  if (!developerURL) {
+    favicons.developerURL = packageJson.repository || '';
   }
 
   // Generate the favicons
@@ -78,16 +105,15 @@ FaviconsWebpackPlugin.prototype.apply = function apply(compiler) {
   }
 };
 
-/**
- * Tries to guess the name from the package.json
- */
-function guessAppName(compilerWorkingDirectory) {
+
+function parsePackageJson(compilerWorkingDirectory) {
   let packageJson = path.resolve(compilerWorkingDirectory, 'package.json');
   if (!fs.existsSync(packageJson)) {
     packageJson = path.resolve(compilerWorkingDirectory, '../package.json');
     if (!fs.existsSync(packageJson)) {
-      return 'Webpack App';
+      return {};
     }
   }
-  return JSON.parse(fs.readFileSync(packageJson)).name;
+
+  return JSON.parse(fs.readFileSync(packageJson));
 }
