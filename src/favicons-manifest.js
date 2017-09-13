@@ -1,11 +1,9 @@
 import loaderUtils from 'loader-utils';
-import * as faviconsModule from 'favicons';
+import favicons from 'favicons';
 import {
   loadIconsFromDiskCache,
   emitCacheInformationFile
 } from './cache';
-
-const { favicons } = faviconsModule;
 
 export default function Favicons(content) {
   const self = this;
