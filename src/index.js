@@ -31,9 +31,9 @@ export default function FaviconsManifestWebpackPlugin(opts) {
     android: true,
     appleIcon: true,
     appleStartup: true,
-    coast: false,
     favicons: true,
     firefox: false,
+    coast: { offset: 25 }, // Create Opera Coast icon with offset 25%.
     opengraph: false,
     twitter: false,
     yandex: false,
