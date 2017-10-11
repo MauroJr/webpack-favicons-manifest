@@ -8,14 +8,14 @@ node_js:
 - '8'
 - '6'
 before_script:
-- npm i -g npm@5.4
-- npm prune
+- rm -rf node_modules
+- yarn
 script:
-- npm run test
-- npm run build
+- yarn run test
+- yarn run build
 after_success:
-- npm run coverage
-- npm run semantic-release
+- yarn run coverage
+- yarn run semantic-release
 branches:
   only:
   - master
