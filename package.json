@@ -1,7 +1,7 @@
 {
   "name": "webpack-favicons-manifest",
   "version": "0.0.0-development",
-  "description": "Let webpack generate all your icons and manifest file for you",
+  "description": "Webpack Plugin to Generate the all types of icons and manifest file for different platforms",
   "main": "./lib/index.js",
   "repository": "git@github.com:MauroJr/webpack-favicons-manifest.git",
   "author": "Mauro Junior",
