@@ -59,17 +59,15 @@ function getPublicPath(compilation) {
 
 function generateIcons(loader, imageFileStream, pathPrefix, query, callback) {
   const publicPath = getPublicPath(loader._compilation);
+
+  query.favicons.path = publicPath + pathPrefix;
   favicons(imageFileStream, query.favicons, (err, result) => {
     if (err) {
       return callback(err);
     }
 
-    const html = result.html
-      .filter(entry => entry.indexOf('manifest') === -1)
-      .map(entry => entry.replace(/(href=[""])/g, '$1' + publicPath + pathPrefix));
-
     const loaderResult = {
-      html,
+      html: result.html,
       outputFilePrefix: pathPrefix,
       files: []
     };
