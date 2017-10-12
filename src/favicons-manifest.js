@@ -38,7 +38,7 @@ export default function Favicons(content) {
       return callback(null, 'module.exports = ' + JSON.stringify(cachedResult));
     }
     // Generate icons
-    generateIcons(self, content, pathPrefix, query, (err, iconResult) => {
+    generateIcons(self, content, pathPrefix, query, fileHash, (err, iconResult) => {
       if (err) {
         return callback(err);
       }
@@ -57,7 +57,7 @@ function getPublicPath(compilation) {
   return publicPath;
 }
 
-function generateIcons(loader, imageFileStream, pathPrefix, query, callback) {
+function generateIcons(loader, imageFileStream, pathPrefix, query, fileHash, callback) {
   const publicPath = getPublicPath(loader._compilation);
 
   query.favicons.path = publicPath + pathPrefix;
@@ -66,8 +66,20 @@ function generateIcons(loader, imageFileStream, pathPrefix, query, callback) {
       return callback(err);
     }
 
+    const html = result.html.map((entry) => {
+      if (/rel="manifest"/g.test(entry)) {
+        return `<link rel="manifest" href="${publicPath}${fileHash}.manifest.json">`;
+      }
+
+      if (/name="msapplication-config"/g.test(entry)) {
+        return `<meta name="msapplication-config" content="${publicPath}${fileHash}.browserconfig.xml">`;
+      }
+
+      return entry;
+    });
+
     const loaderResult = {
-      html: result.html,
+      html,
       outputFilePrefix: pathPrefix,
       files: []
     };
@@ -78,8 +90,10 @@ function generateIcons(loader, imageFileStream, pathPrefix, query, callback) {
     });
 
     result.files.forEach((file) => {
-      loaderResult.files.push(pathPrefix + file.name);
-      loader.emitFile(pathPrefix + file.name, file.contents);
+      const fileName = `${fileHash}.${file.name}`;
+
+      loaderResult.files.push(fileName);
+      loader.emitFile(fileName, file.contents);
     });
 
     callback(null, loaderResult);
